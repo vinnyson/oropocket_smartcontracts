@@ -1,0 +1,49 @@
+[
+  { "prim": "storage", "args": [ { "prim": "unit" } ] },
+  {
+    "prim": "parameter",
+    "args": [
+      {
+        "prim": "or",
+        "args": [
+          {
+            "prim": "pair",
+            "args": [
+              { "prim": "int", "annots": [ "%amount" ] },
+              { "prim": "pair", "args": [ { "prim": "address", "annots": [ "%owner" ] }, { "prim": "address", "annots": [ "%spender" ] } ] }
+            ],
+            "annots": [ "%approvalEvent" ]
+          },
+          {
+            "prim": "pair",
+            "args": [
+              { "prim": "int", "annots": [ "%amount" ] },
+              {
+                "prim": "pair",
+                "args": [
+                  { "prim": "option", "args": [ { "prim": "address" } ], "annots": [ "%fromAddress" ] },
+                  { "prim": "option", "args": [ { "prim": "address" } ], "annots": [ "%toAddress" ] }
+                ]
+              }
+            ],
+            "annots": [ "%transferEvent" ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "prim": "code",
+    "args": [
+      [
+        { "prim": "DUP" },
+        { "prim": "CDR" },
+        { "prim": "SWAP" },
+        { "prim": "CAR" },
+        { "prim": "IF_LEFT", "args": [ [ [ { "prim": "DROP" } ] ], [ [ { "prim": "DROP" } ] ] ] },
+        { "prim": "NIL", "args": [ { "prim": "operation" } ] },
+        { "prim": "PAIR" }
+      ]
+    ]
+  }
+]
