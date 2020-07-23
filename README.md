@@ -22,6 +22,6 @@ Mintable, Burnable, Fungible, 18 decimal
 
 
 ## Admin Key
-[Link to Admin Key](https://github.com/themohitmadan/oro-tezos-smart-contract/blob/master/oropocket_tz1h4omRnq8BkrPSQKCTyaeJBnSQ3x7dR4M5.json)
+[Link to Admin Key](https://github.com/themohitmadan/oro-tezos-smart-contract/blob/master/tz1UwmnCHSSw7hzzgcXptZdhrkkTNmWgoSA9.json)
 
 
