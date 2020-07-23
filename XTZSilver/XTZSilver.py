@@ -4,8 +4,8 @@
 import smartpy as sp
 
 class FA12(sp.Contract):
-    def __init__(self, admin, tokenName, symbol, decimals, eventSinkContractAddress):
-        self.init(paused = False, balances = sp.big_map(tvalue = sp.TRecord(approvals = sp.TMap(sp.TAddress, sp.TNat), balance = sp.TNat)), administrator = admin, totalSupply = 0, name = tokenName, decimals = decimals, symbol = symbol, eventSinkContractAddress = eventSinkContractAddress)
+    def __init__(self, admin, tokenName, symbol, decimals):
+        self.init(paused = False, balances = sp.big_map(tvalue = sp.TRecord(approvals = sp.TMap(sp.TAddress, sp.TNat), balance = sp.TNat)), administrator = admin, totalSupply = 0, name = tokenName, decimals = decimals, symbol = symbol)
 
     @sp.entry_point
     def transfer(self, params):
@@ -18,7 +18,6 @@ class FA12(sp.Contract):
         sp.verify(self.data.balances[params.from_].balance >= params.value)
         self.data.balances[params.from_].balance = sp.as_nat(self.data.balances[params.from_].balance - params.value)
         self.data.balances[params.to_].balance += params.value
-        sp.transfer(sp.record(amount = params.value, fromAddress = sp.some(params.from_), toAddress = sp.some(params.to_)), sp.mutez(0), sp.contract(t = sp.TRecord(amount = sp.TIntOrNat, fromAddress = sp.TOption(sp.TAddress), toAddress = sp.TOption(sp.TAddress)), address = self.data.eventSinkContractAddress , entry_point = "transferEvent" ).open_some())
         #ownself and admin do not require approval amount
         sp.if (params.from_ != sp.sender) & (self.data.administrator != sp.sender):
             self.data.balances[params.from_].approvals[sp.sender] = sp.as_nat(self.data.balances[params.from_].approvals[sp.sender] - params.value)
@@ -30,7 +29,6 @@ class FA12(sp.Contract):
         alreadyApproved = self.data.balances[sp.sender].approvals.get(params.spender, 0)
         sp.verify((alreadyApproved == 0) | (params.value == 0), "UnsafeAllowanceChange")
         self.data.balances[sp.sender].approvals[params.spender] = params.value
-        sp.transfer(sp.record(amount = params.value, owner = sp.sender, spender = params.spender), sp.mutez(0), sp.contract(sp.TRecord(amount = sp.TIntOrNat, owner = sp.TAddress, spender = sp.TAddress), address = self.data.eventSinkContractAddress , entry_point = "approvalEvent" ).open_some())
 
     @sp.entry_point
     def setPause(self, params):
@@ -51,7 +49,7 @@ class FA12(sp.Contract):
         self.addAddressIfNecessary(params.address)
         self.data.balances[params.address].balance += params.value
         self.data.totalSupply += params.value
-        sp.transfer(sp.record(amount = params.value, fromAddress = sp.none, toAddress = sp.some(params.address)), sp.mutez(0), sp.contract(sp.TRecord(amount = sp.TIntOrNat, fromAddress = sp.TOption(sp.TAddress), toAddress = sp.TOption(sp.TAddress)), address = self.data.eventSinkContractAddress , entry_point = "transferEvent" ).open_some())
+
 
     @sp.entry_point
     def burn(self, params):
@@ -60,12 +58,6 @@ class FA12(sp.Contract):
         sp.verify(self.data.balances[params.address].balance >= params.value)
         self.data.balances[params.address].balance = sp.as_nat(self.data.balances[params.address].balance - params.value)
         self.data.totalSupply = sp.as_nat(self.data.totalSupply - params.value)
-        sp.transfer(sp.record(amount = params.value, fromAddress = sp.some(params.address), toAddress = sp.none), sp.mutez(0), sp.contract(sp.TRecord(amount = sp.TIntOrNat, fromAddress = sp.TOption(sp.TAddress), toAddress = sp.TOption(sp.TAddress)), address = self.data.eventSinkContractAddress , entry_point = "transferEvent" ).open_some())
-
-    @sp.entry_point
-    def changeEventSinkContract(self, params):
-        sp.set_type(params, sp.TAddress)
-        self.data.eventSinkContractAddress = params    
 
     def addAddressIfNecessary(self, address):
         sp.if ~ self.data.balances.contains(address):
@@ -87,21 +79,6 @@ class FA12(sp.Contract):
     @sp.entry_point
     def getAdministrator(self, params):
         sp.transfer(self.data.administrator, sp.tez(0), sp.contract(sp.TAddress, params.target).open_some())
-
-class EventSink(sp.Contract):
-    def __init__(self):
-        self.init()
-
-    #minting, transfer, burning events
-    @sp.entry_point
-    def transferEvent(self, params):
-        sp.set_type(params, sp.TRecord(amount = sp.TIntOrNat, fromAddress = sp.TOption(sp.TAddress), toAddress = sp.TOption(sp.TAddress)))
-
-    #approval events
-    @sp.entry_point
-    def approvalEvent(self, params):
-        sp.set_type(params, sp.TRecord(amount = sp.TIntOrNat, owner = sp.TAddress, spender = sp.TAddress))
-
         
 
 class Viewer(sp.Contract):
@@ -131,9 +108,7 @@ if "templates" not in __name__:
         scenario.show([admin, alice, bob])
 
         scenario.h1("Contract")
-        eventSink = EventSink()
-        scenario += eventSink
-        c1 = FA12(admin.address, tokenName = "OroPocket Silver", symbol = "XTZSilver", decimals = 18, eventSinkContractAddress = sp.address("KT1KsDRhdQzebh3dFTTXogkxWaURtRHXfoWq"))
+        c1 = FA12(admin.address, tokenName = "OroPocket Silver", symbol = "XTZSilver", decimals = 18)
 
         scenario.h1("Entry points")
         scenario += c1
@@ -168,9 +143,6 @@ if "templates" not in __name__:
         scenario += c1.setPause(False).run(sender = admin)
         scenario.verify(c1.data.balances[alice.address].balance == 9000000000000000000)
         scenario += c1.transfer(from_ = alice.address, to_ = bob.address, value = 1000000000000000000).run(sender = alice)
-        eventSinkTwo = EventSink()
-        scenario.h1("swap view contract")
-        scenario += c1.changeEventSinkContract(eventSinkTwo.address)
         scenario.verify(c1.data.totalSupply == 17000000000000000000)
         scenario.verify(c1.data.balances[alice.address].balance == 8000000000000000000)
         scenario.verify(c1.data.balances[bob.address].balance == 9000000000000000000)
