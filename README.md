@@ -9,7 +9,7 @@ Token Symbol: XTZGold
 Mintable, Burnable, Fungible, 18 decimal
 
 ### Deployed smart contract on testnet 
-[KT1TgQFx22cCbqx29uLhxv9aH5jjqTnwrj9A](https://carthagenet.tzstats.com/KT1TgQFx22cCbqx29uLhxv9aH5jjqTnwrj9A)
+[KT1NkPQttBJD6EnU8bKRUY3VWXt6JAu6gsBA](https://carthagenet.tzstats.com/KT1NkPQttBJD6EnU8bKRUY3VWXt6JAu6gsBA)
 
 ## XTZ Silver
 ### Details
@@ -18,7 +18,7 @@ Token Symbol: XTZSilver
 Mintable, Burnable, Fungible, 18 decimal
 
 ### Deployed smart contract on testnet 
-[KT1D27Zn4DGTKUex62SuGEdhSvNuHLrSrnhm](https://carthagenet.tzstats.com/KT1D27Zn4DGTKUex62SuGEdhSvNuHLrSrnhm)
+[KT1X3uMtxBG3cSrV8jm2WtHBh94JWDBabBWg](https://carthagenet.tzstats.com/KT1X3uMtxBG3cSrV8jm2WtHBh94JWDBabBWg)
 
 
 ## Admin Key
