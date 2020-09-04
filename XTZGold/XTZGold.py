@@ -63,24 +63,24 @@ class FA12(sp.Contract):
         sp.if ~ self.data.balances.contains(address):
             self.data.balances[address] = sp.record(balance = 0, approvals = {})
 
-    #View callback methods to be called by other smart contracts
-    @sp.entry_point
-    def getBalance(self, params):
-        sp.transfer(self.data.balances[params.arg.owner].balance, sp.tez(0), sp.contract(sp.TNat, params.target).open_some())
-
-    @sp.entry_point
-    def getAllowance(self, params):
-        sp.transfer(self.data.balances[params.arg.owner].approvals[params.arg.spender], sp.tez(0), sp.contract(sp.TNat, params.target).open_some())
-
-    @sp.entry_point
-    def getTotalSupply(self, params):
-        sp.transfer(self.data.totalSupply, sp.tez(0), sp.contract(sp.TNat, params.target).open_some())
-
-    @sp.entry_point
-    def getAdministrator(self, params):
-        sp.transfer(self.data.administrator, sp.tez(0), sp.contract(sp.TAddress, params.target).open_some())
+    @sp.view(sp.TNat)	
+    def getBalance(self, params):	
+        sp.result(self.data.balances[params].balance)
         
-
+    @sp.view(sp.TNat)	
+    def getAllowance(self, params):	
+        sp.result(self.data.balances[params.owner].approvals[params.spender])
+        	
+    @sp.view(sp.TNat)	
+    def getTotalSupply(self, params):	
+        sp.set_type(params, sp.TUnit)	
+        sp.result(self.data.totalSupply)
+        	
+    @sp.view(sp.TAddress)	
+    def getAdministrator(self, params):	
+        sp.set_type(params, sp.TUnit)	
+        sp.result(self.data.administrator)
+        
 class Viewer(sp.Contract):
     def __init__(self, t):
         self.init(last = sp.none)
@@ -151,23 +151,23 @@ if "templates" not in __name__:
         scenario.h2("Balance")
         view_balance = Viewer(sp.TNat)
         scenario += view_balance
-        scenario += c1.getBalance(arg = sp.record(owner = alice.address), target = view_balance.address)
+        scenario += c1.getBalance((alice.address, view_balance.address))
         scenario.verify_equal(view_balance.data.last, sp.some(8000000000000000000))
 
         scenario.h2("Administrator")
         view_administrator = Viewer(sp.TAddress)
         scenario += view_administrator
-        scenario += c1.getAdministrator(target = view_administrator.address)
+        scenario += c1.getAdministrator((sp.unit, view_administrator.address))
         scenario.verify_equal(view_administrator.data.last, sp.some(admin.address))
 
         scenario.h2("Total Supply")
         view_totalSupply = Viewer(sp.TNat)
         scenario += view_totalSupply
-        scenario += c1.getTotalSupply(target = view_totalSupply.address)
+        scenario += c1.getTotalSupply((sp.unit, view_totalSupply.address))
         scenario.verify_equal(view_totalSupply.data.last, sp.some(17000000000000000000))
 
         scenario.h2("Allowance")
         view_allowance = Viewer(sp.TNat)
         scenario += view_allowance
-        scenario += c1.getAllowance(arg = sp.record(owner = alice.address, spender = bob.address), target = view_allowance.address)
+        scenario += c1.getAllowance((sp.record(owner = alice.address, spender = bob.address), view_allowance.address))
         scenario.verify_equal(view_allowance.data.last, sp.some(1000000000000000000))
