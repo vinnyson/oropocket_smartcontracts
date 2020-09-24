@@ -5,7 +5,7 @@ import smartpy as sp
 
 class FA12(sp.Contract):
     def __init__(self, admin, tokenName, symbol, decimals):
-        self.init(paused = False, balances = sp.big_map(tvalue = sp.TRecord(approvals = sp.TMap(sp.TAddress, sp.TNat), balance = sp.TNat)), administrator = admin, totalSupply = 0, name = tokenName, decimals = decimals, symbol = symbol)
+        self.init(paused = False, ledger = sp.big_map(tvalue = sp.TRecord(approvals = sp.TMap(sp.TAddress, sp.TNat), balance = sp.TNat)), administrator = admin, totalSupply = 0, name = tokenName, decimals = decimals, symbol = symbol)
 
     @sp.entry_point
     def transfer(self, params):
@@ -13,22 +13,22 @@ class FA12(sp.Contract):
         sp.verify((sp.sender == self.data.administrator) |
             (~self.data.paused &
                 ((params.from_ == sp.sender) |
-                 (self.data.balances[params.from_].approvals[sp.sender] >= params.value))))
+                 (self.data.ledger[params.from_].approvals[sp.sender] >= params.value))))
         self.addAddressIfNecessary(params.to_)
-        sp.verify(self.data.balances[params.from_].balance >= params.value)
-        self.data.balances[params.from_].balance = sp.as_nat(self.data.balances[params.from_].balance - params.value)
-        self.data.balances[params.to_].balance += params.value
+        sp.verify(self.data.ledger[params.from_].balance >= params.value)
+        self.data.ledger[params.from_].balance = sp.as_nat(self.data.ledger[params.from_].balance - params.value)
+        self.data.ledger[params.to_].balance += params.value
         #ownself and admin do not require approval amount
         sp.if (params.from_ != sp.sender) & (self.data.administrator != sp.sender):
-            self.data.balances[params.from_].approvals[sp.sender] = sp.as_nat(self.data.balances[params.from_].approvals[sp.sender] - params.value)
+            self.data.ledger[params.from_].approvals[sp.sender] = sp.as_nat(self.data.ledger[params.from_].approvals[sp.sender] - params.value)
 
     @sp.entry_point
     def approve(self, params):
         sp.set_type(params, sp.TRecord(spender = sp.TAddress, value = sp.TNat).layout(("spender", "value")))
         sp.verify(~self.data.paused)
-        alreadyApproved = self.data.balances[sp.sender].approvals.get(params.spender, 0)
+        alreadyApproved = self.data.ledger[sp.sender].approvals.get(params.spender, 0)
         sp.verify((alreadyApproved == 0) | (params.value == 0), "UnsafeAllowanceChange")
-        self.data.balances[sp.sender].approvals[params.spender] = params.value
+        self.data.ledger[sp.sender].approvals[params.spender] = params.value
 
     @sp.entry_point
     def setPause(self, params):
@@ -47,7 +47,7 @@ class FA12(sp.Contract):
         sp.set_type(params, sp.TRecord(address = sp.TAddress, value = sp.TNat))
         sp.verify(sp.sender == self.data.administrator)
         self.addAddressIfNecessary(params.address)
-        self.data.balances[params.address].balance += params.value
+        self.data.ledger[params.address].balance += params.value
         self.data.totalSupply += params.value
 
 
@@ -55,21 +55,21 @@ class FA12(sp.Contract):
     def burn(self, params):
         sp.set_type(params, sp.TRecord(address = sp.TAddress, value = sp.TNat))
         sp.verify(sp.sender == self.data.administrator)
-        sp.verify(self.data.balances[params.address].balance >= params.value)
-        self.data.balances[params.address].balance = sp.as_nat(self.data.balances[params.address].balance - params.value)
+        sp.verify(self.data.ledger[params.address].balance >= params.value)
+        self.data.ledger[params.address].balance = sp.as_nat(self.data.ledger[params.address].balance - params.value)
         self.data.totalSupply = sp.as_nat(self.data.totalSupply - params.value)
 
     def addAddressIfNecessary(self, address):
-        sp.if ~ self.data.balances.contains(address):
-            self.data.balances[address] = sp.record(balance = 0, approvals = {})
+        sp.if ~ self.data.ledger.contains(address):
+            self.data.ledger[address] = sp.record(balance = 0, approvals = {})
 
     @sp.view(sp.TNat)	
     def getBalance(self, params):	
-        sp.result(self.data.balances[params].balance)
+        sp.result(self.data.ledger[params].balance)
         
     @sp.view(sp.TNat)	
     def getAllowance(self, params):	
-        sp.result(self.data.balances[params.owner].approvals[params.spender])
+        sp.result(self.data.ledger[params.owner].approvals[params.spender])
         	
     @sp.view(sp.TNat)	
     def getTotalSupply(self, params):	
@@ -120,7 +120,7 @@ if "templates" not in __name__:
         scenario += c1.mint(address = alice.address, value = 3000000000000000000).run(sender = admin)
         scenario.h2("Alice transfers to Bob")
         scenario += c1.transfer(from_ = alice.address, to_ = bob.address, value = 4000000000000000000).run(sender = alice)
-        scenario.verify(c1.data.balances[alice.address].balance == 14000000000000000000)
+        scenario.verify(c1.data.ledger[alice.address].balance == 14000000000000000000)
         scenario.h2("Bob tries to transfer from Alice but he doesn't have her approval")
         scenario += c1.transfer(from_ = alice.address, to_ = bob.address, value = 4000000000000000000).run(sender = bob, valid = False)
         scenario.h2("Alice approves Bob and Bob transfers")
@@ -130,22 +130,22 @@ if "templates" not in __name__:
         scenario += c1.transfer(from_ = alice.address, to_ = bob.address, value = 4000000000000000000).run(sender = bob, valid = False)
         scenario.h2("Admin burns Bob token")
         scenario += c1.burn(address = bob.address, value = 1000000000000000000).run(sender = admin)
-        scenario.verify(c1.data.balances[alice.address].balance == 10000000000000000000)
+        scenario.verify(c1.data.ledger[alice.address].balance == 10000000000000000000)
         scenario.h2("Alice tries to burn Bob token")
         scenario += c1.burn(address = bob.address, value = 1000000000000000000).run(sender = alice, valid = False)
         scenario.h2("Admin pauses the contract and Alice cannot transfer anymore")
         scenario += c1.setPause(True).run(sender = admin)
         scenario += c1.transfer(from_ = alice.address, to_ = bob.address, value = 4000000000000000000).run(sender = alice, valid = False)
-        scenario.verify(c1.data.balances[alice.address].balance == 10000000000000000000)
+        scenario.verify(c1.data.ledger[alice.address].balance == 10000000000000000000)
         scenario.h2("Admin transfers while on pause")
         scenario += c1.transfer(from_ = alice.address, to_ = bob.address, value = 1000000000000000000).run(sender = admin)
         scenario.h2("Admin unpauses the contract and transferts are allowed")
         scenario += c1.setPause(False).run(sender = admin)
-        scenario.verify(c1.data.balances[alice.address].balance == 9000000000000000000)
+        scenario.verify(c1.data.ledger[alice.address].balance == 9000000000000000000)
         scenario += c1.transfer(from_ = alice.address, to_ = bob.address, value = 1000000000000000000).run(sender = alice)
         scenario.verify(c1.data.totalSupply == 17000000000000000000)
-        scenario.verify(c1.data.balances[alice.address].balance == 8000000000000000000)
-        scenario.verify(c1.data.balances[bob.address].balance == 9000000000000000000)
+        scenario.verify(c1.data.ledger[alice.address].balance == 8000000000000000000)
+        scenario.verify(c1.data.ledger[bob.address].balance == 9000000000000000000)
 
         scenario.h1("Views")
         scenario.h2("Balance")
