@@ -6,19 +6,25 @@ Based on [FA1.2 Contract](https://gitlab.com/tzip/tzip/-/blob/master/proposals/t
 ### Details
 Token Name: Oropocket Gold
 Token Symbol: XTZGold
-Mintable, Burnable, Fungible, 18 decimal
+Mintable, Burnable, Fungible, 6 decimal
 
 ### Deployed smart contract on testnet 
-[KT1NkPQttBJD6EnU8bKRUY3VWXt6JAu6gsBA](https://carthagenet.tzstats.com/KT1NkPQttBJD6EnU8bKRUY3VWXt6JAu6gsBA)
+[KT1RDp2KKpggavfWuy1XD1HVkU7y7nz7b3xf](https://carthagenet.tzstats.com/KT1RDp2KKpggavfWuy1XD1HVkU7y7nz7b3xf)
+
+### Deployed smart contract on mainnet 
+[KT1EzDckZPgPxdizLqS5USBotQzoVwSLoXWo](https://tzstats.com/KT1EzDckZPgPxdizLqS5USBotQzoVwSLoXWo)
 
 ## XTZ Silver
 ### Details
 Token Name: Oropocket Silver
 Token Symbol: XTZSilver
-Mintable, Burnable, Fungible, 18 decimal
+Mintable, Burnable, Fungible, 6 decimal
 
 ### Deployed smart contract on testnet 
-[KT1X3uMtxBG3cSrV8jm2WtHBh94JWDBabBWg](https://carthagenet.tzstats.com/KT1X3uMtxBG3cSrV8jm2WtHBh94JWDBabBWg)
+[KT1QNhXHNPZFwiFLQJuuU4xpKZusoHm8JoQN](https://carthagenet.tzstats.com/KT1QNhXHNPZFwiFLQJuuU4xpKZusoHm8JoQN)
+
+### Deployed smart contract on mainnet 
+[KT1JZ1kpUQEz4UBfFKeF1K4mpMenQozxKggq](https://tzstats.com/KT1JZ1kpUQEz4UBfFKeF1K4mpMenQozxKggq)
 
 
 ## Admin Key
