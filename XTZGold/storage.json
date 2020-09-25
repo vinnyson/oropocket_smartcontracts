@@ -1,7 +1,7 @@
 {
   "prim": "Pair",
   "args": [
-    { "prim": "Pair", "args": [ { "string": "tz1UwmnCHSSw7hzzgcXptZdhrkkTNmWgoSA9" }, { "prim": "Pair", "args": [ [], { "int": "18" } ] } ] },
+    { "prim": "Pair", "args": [ { "string": "tz1UwmnCHSSw7hzzgcXptZdhrkkTNmWgoSA9" }, { "prim": "Pair", "args": [ { "int": "6" }, [] ] } ] },
     {
       "prim": "Pair",
       "args": [ { "prim": "Pair", "args": [ { "string": "OroPocket Gold" }, { "prim": "False" } ] }, { "prim": "Pair", "args": [ { "string": "XTZGold" }, { "int": "0" } ] } ]
