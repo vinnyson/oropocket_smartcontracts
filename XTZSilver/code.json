@@ -61,7 +61,7 @@
               {
                 "prim": "or",
                 "args": [
-                  { "prim": "pair", "args": [ { "prim": "unit" }, { "prim": "address" } ], "annots": [ "%getAdministrator" ] },
+                  { "prim": "pair", "args": [ { "prim": "unit" }, { "prim": "contract", "args": [ { "prim": "address" } ] } ], "annots": [ "%getAdministrator" ] },
                   {
                     "prim": "or",
                     "args": [
@@ -69,11 +69,11 @@
                         "prim": "pair",
                         "args": [
                           { "prim": "pair", "args": [ { "prim": "address", "annots": [ "%owner" ] }, { "prim": "address", "annots": [ "%spender" ] } ] },
-                          { "prim": "address" }
+                          { "prim": "contract", "args": [ { "prim": "nat" } ] }
                         ],
                         "annots": [ "%getAllowance" ]
                       },
-                      { "prim": "pair", "args": [ { "prim": "address" }, { "prim": "address" } ], "annots": [ "%getBalance" ] }
+                      { "prim": "pair", "args": [ { "prim": "address" }, { "prim": "contract", "args": [ { "prim": "nat" } ] } ], "annots": [ "%getBalance" ] }
                     ]
                   }
                 ]
@@ -86,7 +86,7 @@
               {
                 "prim": "or",
                 "args": [
-                  { "prim": "pair", "args": [ { "prim": "unit" }, { "prim": "address" } ], "annots": [ "%getTotalSupply" ] },
+                  { "prim": "pair", "args": [ { "prim": "unit" }, { "prim": "contract", "args": [ { "prim": "nat" } ] } ], "annots": [ "%getTotalSupply" ] },
                   { "prim": "pair", "args": [ { "prim": "address", "annots": [ "%address" ] }, { "prim": "nat", "annots": [ "%value" ] } ], "annots": [ "%mint" ] }
                 ]
               },
@@ -357,8 +357,6 @@
                           { "prim": "NIL", "args": [ { "prim": "operation" } ] },
                           { "prim": "DIG", "args": [ { "int": "2" } ] },
                           { "prim": "CDR" },
-                          { "prim": "CONTRACT", "args": [ { "prim": "address" } ] },
-                          { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "8" } ] }, { "prim": "FAILWITH" } ], [] ] },
                           { "prim": "PUSH", "args": [ { "prim": "mutez" }, { "int": "0" } ] },
                           { "prim": "DIG", "args": [ { "int": "3" } ] },
                           { "prim": "TRANSFER_TOKENS" },
@@ -393,8 +391,6 @@
                                 { "prim": "NIL", "args": [ { "prim": "operation" } ] },
                                 { "prim": "DIG", "args": [ { "int": "2" } ] },
                                 { "prim": "CDR" },
-                                { "prim": "CONTRACT", "args": [ { "prim": "nat" } ] },
-                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "8" } ] }, { "prim": "FAILWITH" } ], [] ] },
                                 { "prim": "PUSH", "args": [ { "prim": "mutez" }, { "int": "0" } ] },
                                 { "prim": "DIG", "args": [ { "int": "3" } ] },
                                 { "prim": "TRANSFER_TOKENS" },
@@ -417,8 +413,6 @@
                                 { "prim": "NIL", "args": [ { "prim": "operation" } ] },
                                 { "prim": "DIG", "args": [ { "int": "2" } ] },
                                 { "prim": "CDR" },
-                                { "prim": "CONTRACT", "args": [ { "prim": "nat" } ] },
-                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "8" } ] }, { "prim": "FAILWITH" } ], [] ] },
                                 { "prim": "PUSH", "args": [ { "prim": "mutez" }, { "int": "0" } ] },
                                 { "prim": "DIG", "args": [ { "int": "3" } ] },
                                 { "prim": "TRANSFER_TOKENS" },
@@ -451,8 +445,6 @@
                           { "prim": "NIL", "args": [ { "prim": "operation" } ] },
                           { "prim": "DIG", "args": [ { "int": "2" } ] },
                           { "prim": "CDR" },
-                          { "prim": "CONTRACT", "args": [ { "prim": "nat" } ] },
-                          { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "8" } ] }, { "prim": "FAILWITH" } ], [] ] },
                           { "prim": "PUSH", "args": [ { "prim": "mutez" }, { "int": "0" } ] },
                           { "prim": "DIG", "args": [ { "int": "3" } ] },
                           { "prim": "TRANSFER_TOKENS" },
