@@ -5,7 +5,9 @@ Based on [FA1.2 Contract](https://gitlab.com/tzip/tzip/-/blob/master/proposals/t
 ## XTZ Gold
 ### Details
 Token Name: Oropocket Gold
+
 Token Symbol: XTZGold
+
 Mintable, Burnable, Fungible, 6 decimal
 
 ### Deployed smart contract on mainnet 
@@ -14,7 +16,9 @@ Mintable, Burnable, Fungible, 6 decimal
 ## XTZ Silver
 ### Details
 Token Name: Oropocket Silver
+
 Token Symbol: XTZSilver
+
 Mintable, Burnable, Fungible, 6 decimal
 
 ### Deployed smart contract on mainnet 
