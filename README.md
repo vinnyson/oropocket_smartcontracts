@@ -12,6 +12,9 @@ Mintable, Burnable, Fungible, 6 decimal
 
 ### Deployed smart contract on mainnet 
 [KT1JKNrzC57FtUe3dmYXmm12ucmjDmzbkKrc](https://tzstats.com/KT1JKNrzC57FtUe3dmYXmm12ucmjDmzbkKrc)
+## Testnet Smart Contract
+### Deployed on Testnet(Carthagenet)
+[KT1Bx6RRnYBUE6S6hFgfEPDExqxLixm6X33C](https://carthagenet.tzstats.com/KT1Bx6RRnYBUE6S6hFgfEPDExqxLixm6X33C)
 
 ## XTZ Silver
 ### Details
@@ -27,8 +30,5 @@ Mintable, Burnable, Fungible, 6 decimal
 ## Testnet Smart Contract
 ### Deployed on Testnet(Carthagenet)
 [KT1Lg3nXqj8Z89KA6XgD11TXLBoSp7rM58do](https://carthagenet.tzstats.com/KT1Lg3nXqj8Z89KA6XgD11TXLBoSp7rM58do)
-
-## Admin Key
-[Link to Admin Key](https://github.com/themohitmadan/oro-tezos-smart-contract/blob/master/tz1UwmnCHSSw7hzzgcXptZdhrkkTNmWgoSA9.json)
 
 
