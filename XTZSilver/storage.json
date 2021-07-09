@@ -1,10 +1,61 @@
 {
   "prim": "Pair",
   "args": [
-    { "prim": "Pair", "args": [ { "string": "tz1UwmnCHSSw7hzzgcXptZdhrkkTNmWgoSA9" }, { "prim": "Pair", "args": [ { "int": "6" }, [] ] } ] },
     {
       "prim": "Pair",
-      "args": [ { "prim": "Pair", "args": [ { "string": "OroPocket Silver" }, { "prim": "False" } ] }, { "prim": "Pair", "args": [ { "string": "XTZSilver" }, { "int": "0" } ] } ]
+      "args": [
+        { "string": "tz1hdQscorfqMzFqYxnrApuS5i6QSTuoAp3w" },
+        {
+          "prim": "Pair",
+          "args": [
+            [],
+            [
+              {
+                "prim": "Elt",
+                "args": [ { "string": "" }, { "bytes": "697066733a2f2f516d59757539744d646a7479384657696533377946726e6341376f5a43334d517756686364645a70697076723461" } ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "prim": "Pair",
+      "args": [
+        { "prim": "False" },
+        {
+          "prim": "Pair",
+          "args": [
+            [
+              {
+                "prim": "Elt",
+                "args": [
+                  { "int": "0" },
+                  {
+                    "prim": "Pair",
+                    "args": [
+                      { "int": "0" },
+                      [
+                        { "prim": "Elt", "args": [ { "string": "decimals" }, { "bytes": "36" } ] },
+                        { "prim": "Elt", "args": [ { "string": "name" }, { "bytes": "4f726f706f636b65742053696c766572" } ] },
+                        { "prim": "Elt", "args": [ { "string": "symbol" }, { "bytes": "58545a53696c766572" } ] },
+                        {
+                          "prim": "Elt",
+                          "args": [
+                            { "string": "thumbnailUri" },
+                            { "bytes": "68747470733a2f2f6f726f706f636b65742e636f6d2f756e696661726d2f6173736574732f69636f6e732f6f726f2d73696c7665722e706e67" }
+                          ]
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ],
+            { "int": "0" }
+          ]
+        }
+      ]
     }
   ]
 }
